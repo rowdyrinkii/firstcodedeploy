@@ -12,7 +12,7 @@ FROM openjdk:18-jdk-slim
 # Now we will create a directory inside the container
 WORKDIR /app2
 # Now we will copy everything the above created jar file into this app2 directory with the file name as myapp.jar
-copy --from=build /app1/target/*.jar /myapp.jar
+COPY --from=build /app1/target/*.jar ./myapp.jar
 # now we will expose the port on which application means container will listen
 EXPOSE 8080
 # Now we will run the command to run the java application
