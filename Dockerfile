@@ -1,5 +1,5 @@
 # use maven image to package the application
-FROM mvn:3.8.7-openjdk-18-slim AS build
+FROM maven:3.8.7-openjdk-18-slim AS build
 # will create a directory inside the container
 WORKDIR /app1
 # Will copy everything from git repo to this directory
