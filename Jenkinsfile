@@ -57,7 +57,8 @@ pipeline {
                     dir('firstcodedeploy'){
                         script{
                               // this stage will deploy the application and container will start
-                       sh 'docker run -d -p 8090:8080 --name myapp ${IMAGE_NAME}'
+                       sh 'docker rm -f ${CONTAINER_NAME}'
+		       sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
                        sh 'docker ps'
                        sh 'docker logs myapp'
                         }
