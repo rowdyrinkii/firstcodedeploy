@@ -54,12 +54,28 @@ pipeline {
                 }
             }
         }
+
+                stage('SSH to Remote Server') {
+            steps {
+                script {
+                    // Use withCredentials to access the SSH private key stored in Jenkins
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ManAppDeploy', 
+                                                      keyFileVariable: 'SSH_KEY', 
+                                                      usernameVariable: 'SSH_USER')]) {
+                        // Run your SSH command
+                        sh '''
+                        ssh -i $SSH_KEY -o StrictHostKeyChecking=no ec2-user@$TARGET_EC2_HOST "echo 'Hello from the remote server!'"
+                        '''
+                    }
+                }
+            }
+        }
         
         stage('deploy'){
             steps{
                 script{
                     dir('firstcodedeploy'){
-                        script{
+                        script{/*
                              withCredentials([file(credentialsId: 'ManAppDeploy', variable: 'SSH_KEY')]) {
                         sh """
                             # Transfer the artifact to the target EC2 instance
@@ -67,16 +83,21 @@ pipeline {
                             
                             # Execute the deployment script on the target EC2 instance
                             ssh -i $SSH_KEY -o StrictHostKeyChecking=no ${TARGET_EC2_USER}@${TARGET_EC2_HOST} 'bash -s' < 
-
+*/
                              # this stage will deploy the application and container will start
-                       sh 'docker rm -f ${CONTAINER_NAME}'
-                       #sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
-		               sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
-                       sh 'docker ps'
-                       sh 'docker logs myapp'
+                          docker rm -f ${CONTAINER_NAME}
+                       ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125
+		               docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}
+                       docker ps
+                       docker logs myapp
                         """
                     }
-                             
+                      /* this stage will deploy the application and container will start
+                       sh 'docker rm -f ${CONTAINER_NAME}'
+                       sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
+		               sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
+                       sh 'docker ps'
+                       sh 'docker logs myapp' */       
                         }
                     }
                 }
