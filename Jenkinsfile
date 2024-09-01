@@ -84,7 +84,7 @@ pipeline {
                             # Execute the deployment script on the target EC2 instance
                             ssh -i $SSH_KEY -o StrictHostKeyChecking=no ${TARGET_EC2_USER}@${TARGET_EC2_HOST} 'bash -s' < 
 */
-                             # this stage will deploy the application and container will start
+                             // this stage will deploy the application and container will start
                           docker rm -f ${CONTAINER_NAME}
                        ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125
 		               docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}
