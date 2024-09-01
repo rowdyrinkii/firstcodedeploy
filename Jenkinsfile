@@ -6,7 +6,10 @@ pipeline {
         GIT_BRANCH = 'master'
         IMAGE_NAME = 'manish-image'
 	    CONTAINER_NAME = 'myapp'
-        TARGET_PEM_FILE = credentials('ManAppDeploy')
+        //TARGET_PEM_FILE = credentials('ManAppDeploy')
+        TARGET_EC2_USER = 'ec2-user'
+        TARGET_EC2_HOST = '13.127.144.125'
+       // DEPLOY_SCRIPT = 'deploy.sh' // Deployment script
     }
 
     stages {
@@ -57,12 +60,23 @@ pipeline {
                 script{
                     dir('firstcodedeploy'){
                         script{
-                              // this stage will deploy the application and container will start
+                             withCredentials([file(credentialsId: 'ManAppDeploy', variable: 'SSH_KEY')]) {
+                        sh """
+                            # Transfer the artifact to the target EC2 instance
+                            scp -i $SSH_KEY -o StrictHostKeyChecking=no target/myapp.jar ${TARGET_EC2_USER}@${TARGET_EC2_HOST}:/tmp/
+                            
+                            # Execute the deployment script on the target EC2 instance
+                            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ${TARGET_EC2_USER}@${TARGET_EC2_HOST} 'bash -s' < 
+
+                             # this stage will deploy the application and container will start
                        sh 'docker rm -f ${CONTAINER_NAME}'
-                       sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
+                       #sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
 		               sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
                        sh 'docker ps'
                        sh 'docker logs myapp'
+                        """
+                    }
+                             
                         }
                     }
                 }
