@@ -5,7 +5,8 @@ pipeline {
         GIT_URL = 'https://github.com/manishkrishnvimal/firstcodedeploy.git'
         GIT_BRANCH = 'master'
         IMAGE_NAME = 'manish-image'
-	CONTAINER_NAME = 'myapp'
+	    CONTAINER_NAME = 'myapp'
+        TARGET_PEM_FILE = credentials('ManAppDeploy')
     }
 
     stages {
@@ -58,7 +59,8 @@ pipeline {
                         script{
                               // this stage will deploy the application and container will start
                        sh 'docker rm -f ${CONTAINER_NAME}'
-		       sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
+                       sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
+		               sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
                        sh 'docker ps'
                        sh 'docker logs myapp'
                         }
