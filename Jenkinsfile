@@ -8,7 +8,7 @@ pipeline {
 	    CONTAINER_NAME = 'myapp'
         //TARGET_PEM_FILE = credentials('ManAppDeploy')
         TARGET_EC2_USER = 'ec2-user'
-        TARGET_EC2_HOST = '13.201.168.105'
+        TARGET_EC2_HOST = '15.207.71.147'
        // DEPLOY_SCRIPT = 'deploy.sh' // Deployment script
     }
 
@@ -38,7 +38,7 @@ pipeline {
             }
         }
         
-        
+        /*
         stage('package'){
             steps{
                 script{
@@ -53,7 +53,7 @@ pipeline {
                 }
                 }
             }
-        }
+        } */
 
                 stage('SSH to Remote Server') {
             steps {
@@ -70,7 +70,7 @@ pipeline {
                 }
             }
         }
-        
+        /*
         stage('deploy'){
             steps{
                 script{
@@ -89,6 +89,7 @@ pipeline {
                     }
                 }
             }
+            */
         }
         
     
