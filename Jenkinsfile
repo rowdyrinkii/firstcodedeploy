@@ -8,7 +8,7 @@ pipeline {
 	    CONTAINER_NAME = 'myapp'
         //TARGET_PEM_FILE = credentials('ManAppDeploy')
         TARGET_EC2_USER = 'ec2-user'
-        TARGET_EC2_HOST = '15.207.71.147'
+        TARGET_EC2_HOST = '13.127.175.136'
        // DEPLOY_SCRIPT = 'deploy.sh' // Deployment script
     }
 
