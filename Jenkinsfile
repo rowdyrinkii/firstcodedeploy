@@ -25,16 +25,33 @@ pipeline {
             // this stage will clone the repo from github
             steps {
                 script {
-                
-	        //sh 'git clone https://github.com/manishkrishnvimal/firstcodedeploy.git'
-                
-		sh 'git clone -b ${GIT_BRANCH} ${GIT_URL}'
-                sh 'ls -lrth'
+                      sh 'git clone -b ${GIT_BRANCH} ${GIT_URL}'
+                      sh 'ls -lrth'
                 }
             }
         }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        // Login to ECR
+                        sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com"
+
+                        // Build Docker image
+                        sh "docker build -t test/firstcodedeploy ."
+
+                        // Tag Docker image
+                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+
+                        // Push Docker image to ECR
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+                    }
+                }
+            }
+       }
         
-        
+        /*
         stage('package'){
             steps{
                 script{
@@ -53,7 +70,7 @@ pipeline {
                 }
                 }
             }
-        } 
+        } */
 
 
             /*    stage('SSH to Remote Server') {
@@ -71,7 +88,7 @@ pipeline {
                 }
             }
         } */
-        
+        /*
         stage('deploy'){
             steps{
                 script{
@@ -91,6 +108,7 @@ pipeline {
                     }
                 }
             }
+            */
             
         }
         
