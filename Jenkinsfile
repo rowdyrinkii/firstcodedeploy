@@ -1,17 +1,18 @@
 pipeline {
     agent any
-    /*
+    
     environment{
-        GIT_URL = 'https://github.com/manishkrishnvimal/firstcodedeploy.git'
-        GIT_BRANCH = 'master'
-        IMAGE_NAME = 'manish-image'
-	    CONTAINER_NAME = 'myapp'
+        //GIT_URL = 'https://github.com/manishkrishnvimal/firstcodedeploy.git'
+        //GIT_BRANCH = 'master'
+        //IMAGE_NAME = 'manish-image'
+	    //CONTAINER_NAME = 'myapp'
         //TARGET_PEM_FILE = credentials('ManAppDeploy')
-        TARGET_EC2_USER = 'ec2-user'
-        TARGET_EC2_HOST = '13.127.175.136'
+        //TARGET_EC2_USER = 'ec2-user'
+        //TARGET_EC2_HOST = '13.127.175.136'
        // DEPLOY_SCRIPT = 'deploy.sh' // Deployment script
+       BUILD_TAG = "${BUILD_NUMBER}"
     }
-    */
+
 
     stages {
                 stage('Build and Push Docker Image') {
@@ -23,7 +24,7 @@ pipeline {
                         sh "docker build -t test/firstcodedeploy ."
 
                         // Tag Docker image
-                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+                        sh "docker tag test/firstcodedeploy:${BUILD_TAG} 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
 
                         // Push Docker image to ECR
                         sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
