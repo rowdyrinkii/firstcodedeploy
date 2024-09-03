@@ -74,7 +74,7 @@ pipeline {
                         script{
                              // this stage will deploy the application and container will start
                            sh 'docker rm -f ${CONTAINER_NAME}'
-                           sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
+                           //sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
 		                   sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
                            sh 'docker ps'
                            sh 'docker logs myapp' 
