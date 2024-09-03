@@ -16,6 +16,13 @@ pipeline {
 
     stages {
 stage('Build and Push Docker Image') {
+    // have created a iam user with ec2containerfullregisteryaccess and stored access key and secret access key
+    // in Jenkins credentials with kind user name and password where username will be access key amd pwd will be 
+    // secret access key and the id will be which will be passed as cred id in pipeline below
+
+    // git rebase -i HEAD~n , is used for listing last commits where n means no of commits
+    // this prompt editor where pick needs to be replaced with drop which will delete the commits 
+    // which has been not pushed to github repo. 
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
