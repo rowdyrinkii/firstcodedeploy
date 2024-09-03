@@ -13,14 +13,10 @@ pipeline {
     }
 
     stages {
-        stage('Cleanup') {
-            steps {
-                deleteDir()  // Cleans the workspace before the job starts
-            }
-        }
         
         stage('clean image before run'){
             steps{
+                deleteDir()  // Cleans the workspace before the job starts
                 sh 'docker rmi -f ${IMAGE_NAME}'
                 sh 'docker system prune -f'
             }
@@ -38,7 +34,7 @@ pipeline {
             }
         }
         
-        /*
+        
         stage('package'){
             steps{
                 script{
@@ -53,9 +49,9 @@ pipeline {
                 }
                 }
             }
-        } */
+        } 
 
-                stage('SSH to Remote Server') {
+            /*    stage('SSH to Remote Server') {
             steps {
                 script {
                     // Use withCredentials to access the SSH private key stored in Jenkins
@@ -69,8 +65,8 @@ pipeline {
                     }
                 }
             }
-        }
-        /*
+        } */
+        
         stage('deploy'){
             steps{
                 script{
@@ -89,7 +85,7 @@ pipeline {
                     }
                 }
             }
-            */
+            
         }
         
     
