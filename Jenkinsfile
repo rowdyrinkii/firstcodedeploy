@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+    /*
     environment{
         GIT_URL = 'https://github.com/manishkrishnvimal/firstcodedeploy.git'
         GIT_BRANCH = 'master'
@@ -11,9 +11,27 @@ pipeline {
         TARGET_EC2_HOST = '13.127.175.136'
        // DEPLOY_SCRIPT = 'deploy.sh' // Deployment script
     }
+    */
 
     stages {
-        
+                stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        // Login to ECR
+                        sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com"
+                        sh "docker build -t test/firstcodedeploy ."
+
+                        // Tag Docker image
+                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+
+                        // Push Docker image to ECR
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+                    }
+                }
+            }
+       }
+        /*
         stage('clean image before run'){
             steps{
                 deleteDir()  // Cleans the workspace before the job starts
@@ -22,7 +40,6 @@ pipeline {
             }
         }
         stage('clone repo') {
-            // this stage will clone the repo from github
             steps {
                 script {
                       sh 'git clone -b ${GIT_BRANCH} ${GIT_URL}'
@@ -30,27 +47,8 @@ pipeline {
                 }
             }
         }
+        */
 
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        // Login to ECR
-                        sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com"
-
-                        // Build Docker image
-                        sh "docker build -t test/firstcodedeploy ."
-
-                        // Tag Docker image
-                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
-
-                        // Push Docker image to ECR
-                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
-                    }
-                }
-            }
-       }
-        
         /*
         stage('package'){
             steps{
