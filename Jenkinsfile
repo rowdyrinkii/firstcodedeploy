@@ -21,13 +21,13 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         // Login to ECR
                         sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com"
-                        sh "docker build -t test/firstcodedeploy ."
+                        sh "docker build -t test/firstcodedeploy:${BUILD_TAG} ."
 
                         // Tag Docker image
-                        sh "docker tag test/firstcodedeploy:${BUILD_TAG} 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+                        sh "docker tag test/firstcodedeploy:${BUILD_TAG} 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
 
                         // Push Docker image to ECR
-                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
                     }
                 }
             }
