@@ -44,12 +44,17 @@ pipeline {
                  script{
                       sh 'pwd'
                       sh 'ls -lrth'
-                      sh 'docker build -t ${IMAGE_NAME} .'
+                      sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com'
+                      //sh 'docker build -t ${IMAGE_NAME} .'
+                      sh 'docker build -t test/firstcodedeploy .'
+                      sh 'docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest'
+                      sh 'docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest'
                  }
                 }
                 }
             }
         } 
+
 
             /*    stage('SSH to Remote Server') {
             steps {
@@ -75,7 +80,8 @@ pipeline {
                              // this stage will deploy the application and container will start
                            sh 'docker rm -f ${CONTAINER_NAME}'
                            //sh 'ssh -i ${TARGET_PEM_FILE} ec2-user@13.127.144.125'
-		                   sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
+		                   //sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}'
+                           sh 'docker run -d -p 8090:8080 --name ${CONTAINER_NAME} firstcodedeploy'
                            sh 'docker ps'
                            sh 'docker logs myapp' 
                        
