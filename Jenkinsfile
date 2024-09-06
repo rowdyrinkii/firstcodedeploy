@@ -4,6 +4,7 @@ pipeline {
     environment{
         //IMAGE_NAME = 'manish-image'
 	    //CONTAINER_NAME = 'myapp'
+        // 
     }
 
     stages {
