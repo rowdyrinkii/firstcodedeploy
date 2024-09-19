@@ -14,7 +14,8 @@ pipeline {
 
     // git rebase -i HEAD~n , is used for listing last commits where n means no of commits
     // this prompt editor where pick needs to be replaced with drop which will delete the commits 
-    // which has been not pushed to github repo. 
+    // which has been not pushed to github repo.
+    // groups jenkins command to check if jenkins user is part of docker group or not 
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
