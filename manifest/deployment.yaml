@@ -13,8 +13,9 @@ spec:
           app: java
       spec:
         containers:
-        - image: 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 
+        - image: 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest
+          imagePullPolicy: Always
           name: app-container
-          - ports:
-              containerPort: 8080
-              protocol: TCP
+          ports:
+          - containerPort: 8080
+            protocol: TCP 
