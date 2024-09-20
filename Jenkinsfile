@@ -47,6 +47,7 @@ pipeline {
         stage('Deploy the application'){
             steps{
                 script{
+                    // to find where is kubectl binary , command is : 1) whereis kubectl 2) which kubectl 3) type kubectl
                     // sudo mv /home/ubuntu/kubectl /usr/local/bin/  to make kubectl accessible to jenkins user on ec2 machine so that it is able to run kubectl apply commands.
                     echo "Deploying to EKS cluster"
                     sh 'aws eks update-kubeconfig --name cluster --region ap-south-1'
