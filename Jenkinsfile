@@ -47,6 +47,7 @@ pipeline {
         stage('Deploy the application'){
             steps{
                 script{
+                    sh 'sudo su'
                     sh 'kubectl apply -f ./manifest/deployment.yaml'
                     sh 'kubectl rollout restart deployment java-app-deployment'
                     sh 'kubectl get pods'
