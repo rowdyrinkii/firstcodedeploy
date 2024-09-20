@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: 5M
 spec:
  rules:
-   - host: sxmyapp.dryice-aws.com
+   - host: aad10418a4fcf4b039b9581fe4752418-06b14723f3efad7e.elb.ap-south-1.amazonaws.com
      http:
        paths:
          - path: /
