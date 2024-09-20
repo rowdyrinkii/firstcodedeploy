@@ -32,18 +32,29 @@ pipeline {
                         sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
 
                         // Tag Docker image with tag Build number and repo name 
-                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_NUMBER}"
 
                         // Push Build number tag Docker image to ECR
-                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_NUMBER}"
                         
                         // remove all tags images from ec2 jenkins machine docker cache
-                        sh "docker image rm test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+                        sh "docker image rm test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_NUMBER}"
 
                     }
                 }
             }
-        }           
+        } 
+        stage('Deploy the application'){
+            steps{
+                script{
+                    sh 'kubectl apply -f ./manifest/deployment.yaml'
+                    sh 'kubectl rollout restart deployment java-app-deployment'
+                    sh 'kubectl get pods'
+                    sh 'kubectl wait --for=jsonpath="{.status.phase}"=Running pod'
+                    sh 'kubectl delete pod ${kubectl get pods --for=jsonpath="{.status.phase}"=Running}'
+                }
+            }
+        }          
         }   
 }
 

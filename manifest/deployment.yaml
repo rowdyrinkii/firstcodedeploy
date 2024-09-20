@@ -1,0 +1,21 @@
+apiVerison: apps/v1
+kind: Deployment
+metadata:
+  name: first-app-deploy
+spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       app: java
+   template:
+      metadata:
+        labels:
+          app: java
+      spec:
+        containers:
+        - image: 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 
+          name: app-container
+          imagePullPolicy: Always
+          - ports:
+              containerPort: 8080
+              protocol: TCP
