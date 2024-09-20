@@ -15,7 +15,6 @@ spec:
         containers:
         - image: 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 
           name: app-container
-          imagePullPolicy: Always
           - ports:
               containerPort: 8080
               protocol: TCP
