@@ -55,6 +55,7 @@ pipeline {
                     sh 'kubectl apply -f ./manifest/service.yaml'
                     //sh 'kubectl rollout restart deployment java-app-deployment'
                     sh 'kubectl get pods'
+                    sh 'kubectl get svc'
                     //sh 'kubectl wait --for=jsonpath="{.status.phase}"=Running pod'
                     //sh 'kubectl delete pod ${kubectl get pods --for=jsonpath="{.status.phase}"=Running}'
                 }
