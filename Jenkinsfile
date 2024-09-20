@@ -52,10 +52,10 @@ pipeline {
                     echo "Deploying to EKS cluster"
                     sh 'aws eks update-kubeconfig --name cluster --region ap-south-1'
                     sh 'kubectl apply -f ./manifest/deployment.yaml'
-                    sh 'kubectl rollout restart deployment java-app-deployment'
+                    //sh 'kubectl rollout restart deployment java-app-deployment'
                     sh 'kubectl get pods'
-                    sh 'kubectl wait --for=jsonpath="{.status.phase}"=Running pod'
-                    sh 'kubectl delete pod ${kubectl get pods --for=jsonpath="{.status.phase}"=Running}'
+                    //sh 'kubectl wait --for=jsonpath="{.status.phase}"=Running pod'
+                    //sh 'kubectl delete pod ${kubectl get pods --for=jsonpath="{.status.phase}"=Running}'
                 }
             }
         }          
