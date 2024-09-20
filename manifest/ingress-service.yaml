@@ -10,5 +10,5 @@ spec:
     targetPort: 8080
     protocol: TCP
   sessionAffinity: None
-  type: clusterIP
+  type: ClusterIP
     
