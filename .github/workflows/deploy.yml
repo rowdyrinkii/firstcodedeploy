@@ -1,0 +1,40 @@
+name: Connect to Servers
+
+on:
+  push:
+    branches:
+      - github-actions  # Change to your branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load environment variables
+        run: |
+          echo "Loading variables..."
+          echo "TARGET_HOST=$(cat vars.env | grep TARGET_HOST | cut -d '=' -f2)" >> $GITHUB_ENV
+
+      - name: Connect to Bastion Host
+        env:
+          BASTION_PRIVATE_KEY: ${{ secrets.BASTION_PVT_KEY }}
+          TARGET_SERVER_PVT_KEY: ${{ secrets.TARGET_SERVER_PVT_KEY }}
+        run: |
+          echo "Connecting to Bastion Host..."
+          mkdir -p ~/.ssh
+          echo "$BASTION_PRIVATE_KEY" > ~/.ssh/bastion_key.pem
+          chmod 600 ~/.ssh/bastion_key.pem
+          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@3.110.128.122 << EOF
+            echo "Creating test file on Bastion..."
+            echo "This is a test file on Bastion" > /home/ec2-user/bastion_test_file.txt
+            
+            echo "Connecting to Target Host..."
+            TARGET_HOST=${TARGET_HOST}
+            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << TARGET_EOF
+              echo "Creating test file on Target Host..."
+              echo "This is a test file on $TARGET_HOST" > /home/ec2-user/target_test_file.txt
+            TARGET_EOF
+          EOF
