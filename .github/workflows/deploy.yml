@@ -3,9 +3,7 @@ name: Connect to Servers
 on:
   push:
     paths:
-      - 'workflows/**'
-    #branches:
-      #- github-actions  # Change to your branch name whatever is
+      - '.github/workflows/deploy.yml'  # Only trigger when deploy.yml is modified
 
 jobs:
   deploy:
@@ -33,9 +31,8 @@ jobs:
             echo "Creating test file on Bastion..."
             echo "This is a test file on Bastion" > /home/ec2-user/bastion_test_file.txt 
             echo "Connecting to Target Host..."
-            #TARGET_HOST=${TARGET_HOST}
-            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'EOF'
+            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'TARGET_EOF'
               echo "Creating test file on Target Host..."
               echo "This is a test file on $TARGET_HOST" > /home/ec2-user/target_test_file.txt
-            'EOF'
+            TARGET_EOF
           EOF
