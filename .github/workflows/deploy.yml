@@ -1,7 +1,7 @@
 name: Connect to Servers
 
 on:
-  push:
+  #push:
     branches:
       - github-actions  # Change to your branch name
 
@@ -27,13 +27,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "$BASTION_PRIVATE_KEY" > ~/.ssh/bastion_key.pem
           chmod 600 ~/.ssh/bastion_key.pem
-          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@3.110.128.122 << EOF
+          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << EOF
             echo "Creating test file on Bastion..."
-            echo "This is a test file on Bastion" > /home/ec2-user/bastion_test_file5.txt 
+            echo "This is a test file on Bastion" > /home/ec2-user/bastion_test_file6.txt 
             echo "Connecting to Target Host..."
             #TARGET_HOST=${TARGET_HOST}
             ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'TARGET_EOF'
               echo "Creating test file on Target Host..."
-              echo "This is a test file on $TARGET_HOST" > /home/ec2-user/target_test_file5.txt
+              echo "This is a test file on $TARGET_HOST" > /home/ec2-user/target_test_file6.txt
             'TARGET_EOF'
           EOF
