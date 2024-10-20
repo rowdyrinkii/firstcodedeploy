@@ -2,10 +2,10 @@ name: Connect to Servers
 
 on:
   push:
+    paths:
+      - 'deploy.yml'
     #branches:
       #- github-actions  # Change to your branch name whatever is
-      paths:
-      - 'workflows/deploy.yml'
 
 jobs:
   deploy:
