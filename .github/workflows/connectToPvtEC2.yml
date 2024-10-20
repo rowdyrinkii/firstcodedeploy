@@ -31,8 +31,8 @@ jobs:
             echo "Creating test file on Bastion..."
             echo "Hello, From Bastion i.e public ec2 machine" > /home/ec2-user/bastion_test_file.txt 
             echo "Connecting to Target Host..."
-            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'EOF_TARGET'
+            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'TARGET_EOF'
               echo "Creating test file on Target Host..."
               echo "Hello, From target machine i.e private ec2 machine with pvt ip :$TARGET_HOST" > /home/ec2-user/target_test_file.txt
-            EOF_TARGET
+            TARGET_EOF
           EOF_BASTION
