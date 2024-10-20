@@ -3,7 +3,7 @@ name: Connect to Servers
 on:
   push:
     paths:
-      - '.github/workflows/deploy.yml'  # Only trigger when deploy.yml is modified
+      - '.github/workflows/connectToPvtEC2.yml'  # Only trigger when deploy.yml is modified
 
 jobs:
   deploy:
@@ -27,12 +27,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "$BASTION_PRIVATE_KEY" > ~/.ssh/bastion_key.pem
           chmod 600 ~/.ssh/bastion_key.pem
-          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << EOF
+          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << 'EOF_BASTION'
             echo "Creating test file on Bastion..."
-            echo "This is a test file on Bastion" > /home/ec2-user/bastion_test_file.txt 
+            echo "Hello, From Bastion i.e public ec2 machine" > /home/ec2-user/bastion_test_file.txt 
             echo "Connecting to Target Host..."
-            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'TARGET_EOF'
+            ssh -i /home/ec2-user/vpc-endpoint.pem -o StrictHostKeyChecking=no ec2-user@$TARGET_HOST << 'EOF_TARGET'
               echo "Creating test file on Target Host..."
-              echo "This is a test file on $TARGET_HOST" > /home/ec2-user/target_test_file.txt
-            TARGET_EOF
-          EOF
+              echo "Hello, From target machine i.e private ec2 machine with pvt ip :$TARGET_HOST" > /home/ec2-user/target_test_file.txt
+            EOF_TARGET
+          EOF_BASTION
