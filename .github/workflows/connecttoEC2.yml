@@ -1,0 +1,27 @@
+name: Connect to Servers
+
+on:
+  push:
+    paths:
+      - '.github/workflows/connecttoEC2.yml'  # Only trigger when deploy.yml is modified
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Connect to Bastion Host
+        env:
+          BASTION_PRIVATE_KEY: ${{ secrets.BASTION_PVT_KEY }}
+        run: |
+          echo "Connecting to Bastion Host..."
+          mkdir -p ~/.ssh
+          echo "$BASTION_PRIVATE_KEY" > ~/.ssh/bastion_key.pem
+          chmod 600 ~/.ssh/bastion_key.pem
+          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << EOF
+            echo "Creating hello world file on Bastion..."
+            echo "This is the hello world file created using github actions" > /home/ec2-user/hello_world.txt 
+          EOF
