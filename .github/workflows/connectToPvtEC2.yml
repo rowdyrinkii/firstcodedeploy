@@ -27,7 +27,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$BASTION_PRIVATE_KEY" > ~/.ssh/bastion_key.pem
           chmod 600 ~/.ssh/bastion_key.pem
-          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << 'EOF_BASTION'
+          ssh -i ~/.ssh/bastion_key.pem -o StrictHostKeyChecking=no ec2-user@13.235.31.183 << EOF
             echo "Creating test file on Bastion..."
             echo "Hello, From Bastion i.e public ec2 machine" > /home/ec2-user/bastion_test_file.txt 
             echo "Connecting to Target Host..."
@@ -35,4 +35,4 @@ jobs:
               echo "Creating test file on Target Host..."
               echo "Hello, From target machine i.e private ec2 machine with pvt ip :$TARGET_HOST" > /home/ec2-user/target_test_file.txt
             TARGET_EOF
-          EOF_BASTION
+          EOF
